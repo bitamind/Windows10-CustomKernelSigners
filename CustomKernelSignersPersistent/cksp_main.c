@@ -229,23 +229,10 @@ static NTSTATUS CkspMain(_In_ PCKSP_WORKER_CONTEXT Context) {
     NTSTATUS Status;
     ULONG PolicyValueType;
     ULONG ReturnLength;
-    // ULONG CiAcp;
     ULONG CiAcpCks;
     IO_STATUS_BLOCK IoStatusBlock;
 
     while (1) {
-        //
-        // Get status of CodeIntegrity-AllowConfigurablePolicy
-        //
-        // Status = ZwQueryLicenseValue(&g_CiAcpName, &PolicyValueType, &CiAcp, sizeof(CiAcp), &ReturnLength);
-        // if (!NT_SUCCESS(Status)) {
-        //     goto ON_CpskMain_ERROR;
-        // }
-        // if (PolicyValueType != REG_DWORD || ReturnLength != sizeof(ULONG)) {
-        //     Status = STATUS_OBJECT_TYPE_MISMATCH;
-        //     goto ON_CpskMain_ERROR;
-        // }
-
         //
         // Get status of CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners
         //
@@ -259,8 +246,7 @@ static NTSTATUS CkspMain(_In_ PCKSP_WORKER_CONTEXT Context) {
         }
 
         //
-        // When either CodeIntegrity-AllowConfigurablePolicy or CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners 
-        // is not enable, we need update now;
+        // When CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners is not enable, we need update now;
         //
         if (CiAcpCks == 0) {
             Status = CkspEnableCustomKernelSigners(Context);
