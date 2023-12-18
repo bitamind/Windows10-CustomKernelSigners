@@ -27,7 +27,7 @@ jobs:
   build:
     strategy:
       matrix:
-        PLATFORM_TARGET: [x64, x86]
+        PLATFORM_TARGET: [x64, Win32]
     runs-on: windows-2019
 
     steps:
