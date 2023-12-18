@@ -237,14 +237,14 @@ static NTSTATUS CkspMain(_In_ PCKSP_WORKER_CONTEXT Context) {
         //
         // Get status of CodeIntegrity-AllowConfigurablePolicy
         //
-        Status = ZwQueryLicenseValue(&g_CiAcpName, &PolicyValueType, &CiAcp, sizeof(CiAcp), &ReturnLength);
-        if (!NT_SUCCESS(Status)) {
-            goto ON_CpskMain_ERROR;
-        }
-        if (PolicyValueType != REG_DWORD || ReturnLength != sizeof(ULONG)) {
-            Status = STATUS_OBJECT_TYPE_MISMATCH;
-            goto ON_CpskMain_ERROR;
-        }
+        // Status = ZwQueryLicenseValue(&g_CiAcpName, &PolicyValueType, &CiAcp, sizeof(CiAcp), &ReturnLength);
+        // if (!NT_SUCCESS(Status)) {
+        //     goto ON_CpskMain_ERROR;
+        // }
+        // if (PolicyValueType != REG_DWORD || ReturnLength != sizeof(ULONG)) {
+        //     Status = STATUS_OBJECT_TYPE_MISMATCH;
+        //     goto ON_CpskMain_ERROR;
+        // }
 
         //
         // Get status of CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners

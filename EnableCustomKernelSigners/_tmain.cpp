@@ -150,8 +150,8 @@ int EnableCksSetupMode() {
         return -1;
     }
 
-    Policy[L"CodeIntegrity-AllowConfigurablePolicy"].GetData<PolicyValue::TypeOfUInt32>() = 1;
-    _tprintf_s(TEXT("[*] Enable CodeIntegrity-AllowConfigurablePolicy\n"));
+    //Policy[L"CodeIntegrity-AllowConfigurablePolicy"].GetData<PolicyValue::TypeOfUInt32>() = 1;
+    //_tprintf_s(TEXT("[*] Enable CodeIntegrity-AllowConfigurablePolicy\n"));
 
     Policy[L"CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners"].GetData<PolicyValue::TypeOfUInt32>() = 1;
     _tprintf_s(TEXT("[*] Enable CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners\n"));
