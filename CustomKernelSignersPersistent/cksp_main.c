@@ -229,7 +229,7 @@ static NTSTATUS CkspMain(_In_ PCKSP_WORKER_CONTEXT Context) {
     NTSTATUS Status;
     ULONG PolicyValueType;
     ULONG ReturnLength;
-    ULONG CiAcp;
+    // ULONG CiAcp;
     ULONG CiAcpCks;
     IO_STATUS_BLOCK IoStatusBlock;
 
@@ -262,7 +262,7 @@ static NTSTATUS CkspMain(_In_ PCKSP_WORKER_CONTEXT Context) {
         // When either CodeIntegrity-AllowConfigurablePolicy or CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners 
         // is not enable, we need update now;
         //
-        if (CiAcp == 0 || CiAcpCks == 0) {
+        if (CiAcpCks == 0) {
             Status = CkspEnableCustomKernelSigners(Context);
             if (!NT_SUCCESS(Status))
                 goto ON_CpskMain_ERROR;
