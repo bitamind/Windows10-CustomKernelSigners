@@ -27,7 +27,7 @@ jobs:
   build:
     strategy:
       matrix:
-        PLATFORM_TARGET: [x64, Win32]
+        PLATFORM_TARGET: [x64, x86]
     runs-on: windows-2019
 
     steps:
@@ -45,7 +45,7 @@ jobs:
     - name: tar
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        tar -jcvf CKS_${{matrix.PLATFORM_TARGET}}.tar.bz2 ./bin/${{matrix.PLATFORM_TARGET}}-${{env.BUILD_CONFIGURATION}}
+        tar -jcvf CKS_${{matrix.PLATFORM_TARGET}}.tar.bz2 ./bin/*-${{env.BUILD_CONFIGURATION}}
       shell: bash
 
 # Upload package: https://github.com/marketplace/actions/upload-artifact
