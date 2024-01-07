@@ -23,14 +23,10 @@ UNICODE_STRING g_ProductOptionsKeyName =
 UNICODE_STRING g_ProductPolicyValueName =
     RTL_CONSTANT_STRING(L"ProductPolicy");
 
-UNICODE_STRING g_CiAcpName =
-    RTL_CONSTANT_STRING(L"CodeIntegrity-AllowConfigurablePolicy");
-
 UNICODE_STRING g_CiAcpCksName =
     RTL_CONSTANT_STRING(L"CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners");
 
 static NTSTATUS CkspModifyPolicyBinary(_In_ PUCHAR lpBytes, _In_ ULONG cbBytes) {
-    BOOLEAN AllowConfigurablePolicySet = FALSE;
     BOOLEAN AllowConfigurablePolicyCustomKernelSignerSet = FALSE;
     PPPBinaryHeader pHeader = (PPPBinaryHeader)lpBytes;
     PUCHAR EndPtr = lpBytes + cbBytes;
@@ -60,14 +56,7 @@ static NTSTATUS CkspModifyPolicyBinary(_In_ PUCHAR lpBytes, _In_ ULONG cbBytes) 
         if ((PUCHAR)pValData + pVal->DataSize > EndPtr)
             return STATUS_INVALID_PARAMETER;
         
-        if (AllowConfigurablePolicySet == FALSE && _wcsnicmp(pValName, L"CodeIntegrity-AllowConfigurablePolicy", pVal->NameSize / 2) == 0) {
-            if (pVal->DataType == REG_DWORD && pVal->DataSize == 4) {
-                *(PULONG)pValData = 1;
-                AllowConfigurablePolicySet = TRUE;
-            } else {
-                return STATUS_INVALID_PARAMETER;
-            }
-        } else if (AllowConfigurablePolicyCustomKernelSignerSet == FALSE && _wcsnicmp(pValName, L"CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners", pVal->NameSize / 2) == 0) {
+        if (AllowConfigurablePolicyCustomKernelSignerSet == FALSE && _wcsnicmp(pValName, L"CodeIntegrity-AllowConfigurablePolicy-CustomKernelSigners", pVal->NameSize / 2) == 0) {
             if (pVal->DataType == REG_DWORD && pVal->DataSize == 4) {
                 *(PULONG)pValData = 1;
                 AllowConfigurablePolicyCustomKernelSignerSet = TRUE;
@@ -76,7 +65,7 @@ static NTSTATUS CkspModifyPolicyBinary(_In_ PUCHAR lpBytes, _In_ ULONG cbBytes) 
             }
         }
 
-        if (AllowConfigurablePolicySet && AllowConfigurablePolicyCustomKernelSignerSet)
+        if (AllowConfigurablePolicyCustomKernelSignerSet)
             break;
     }
 
