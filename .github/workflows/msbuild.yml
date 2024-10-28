@@ -1,0 +1,58 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: MSBuild
+
+on:
+  push:
+    branches: [ "mod" ]
+  pull_request:
+    branches: [ "mod" ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: .
+
+  # Configuration type to build.
+  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  BUILD_CONFIGURATION: Release
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        PLATFORM_TARGET: [x64, x86]
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      # Add additional options to the MSBuild command line here (like platform or verbosity level).
+      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=${{matrix.PLATFORM_TARGET}} ${{env.SOLUTION_FILE_PATH}}
+
+    - name: tar
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        tar -jcvf CKS_${{matrix.PLATFORM_TARGET}}.tar.bz2 ./bin/*-${{env.BUILD_CONFIGURATION}}
+      shell: bash
+
+# Upload package: https://github.com/marketplace/actions/upload-artifact
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Windows10-CustomKernelSigners ${{matrix.PLATFORM_TARGET}} ${{env.BUILD_CONFIGURATION}} build
+        path: CKS_${{matrix.PLATFORM_TARGET}}.tar.bz2
