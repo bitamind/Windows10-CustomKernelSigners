@@ -1,3 +1,4 @@
+#define POOL_ZERO_DOWN_LEVEL_SUPPORT
 #include "cksp_defs.h"
 
 VOID NTAPI DriverUnload(_In_ PDRIVER_OBJECT DriverObject) {
@@ -32,7 +33,7 @@ VOID NTAPI CkspDeferUnloadWorker(PVOID StartContext) {
 VOID CkspDeferUnloadAsPossible(_In_ PCKSP_WORKER_CONTEXT Context) {
     PUNICODE_STRING DriverServiceName;
     
-    DriverServiceName = (PUNICODE_STRING)ExAllocatePoolWithTag(PagedPool, sizeof(UNICODE_STRING), 'cksp');
+    DriverServiceName = (PUNICODE_STRING)ExAllocatePoolZero(PagedPool, sizeof(UNICODE_STRING), 'cksp');
     if (DriverServiceName) {
         NTSTATUS Status;
         HANDLE ThreadHandle;

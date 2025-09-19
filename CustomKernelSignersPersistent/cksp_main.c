@@ -1,3 +1,4 @@
+#define POOL_ZERO_DOWN_LEVEL_SUPPORT
 #include "cksp_defs.h"
 
 typedef struct _PPBinaryHeader {
@@ -89,7 +90,7 @@ static NTSTATUS CkspEnableCustomKernelSigners(_In_ PCKSP_WORKER_CONTEXT Context)
         } else if (Status == STATUS_BUFFER_OVERFLOW || Status == STATUS_BUFFER_TOO_SMALL) {
             ExFreePoolWithTag(Context->ProductPolicyValueInfo, 'cksp');
             Context->ProductPolicyValueInfo = 
-                (PKEY_VALUE_PARTIAL_INFORMATION)ExAllocatePoolWithTag(PagedPool, ResultLength, 'cksp');
+                (PKEY_VALUE_PARTIAL_INFORMATION)ExAllocatePoolZero(PagedPool, ResultLength, 'cksp');
             if (Context->ProductPolicyValueInfo) {
                 Context->ProductPolicyValueInfoSize = ResultLength;
             } else {
@@ -172,7 +173,7 @@ NTSTATUS CkspInitContext(_In_ PCKSP_WORKER_CONTEXT Context, _In_ PDRIVER_OBJECT 
         if (Status != STATUS_BUFFER_OVERFLOW && Status != STATUS_BUFFER_TOO_SMALL && Status != STATUS_SUCCESS)
             goto ON_CkspInitContext_ERROR;
 
-        Context->ProductPolicyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ExAllocatePoolWithTag(PagedPool, ResultLength, 'cksp');
+        Context->ProductPolicyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ExAllocatePoolZero(PagedPool, ResultLength, 'cksp');
         if (Context->ProductPolicyValueInfo == NULL) {
             Status = STATUS_NO_MEMORY;
             goto ON_CkspInitContext_ERROR;

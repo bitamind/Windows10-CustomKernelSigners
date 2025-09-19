@@ -1,3 +1,4 @@
+#define POOL_ZERO_DOWN_LEVEL_SUPPORT
 #include "cksp_defs.h"
 
 PCKSP_WORKER_CONTEXT g_CkspWorkerContext;
@@ -19,7 +20,8 @@ NTSTATUS NTAPI DriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRIN
     //
     // Allocate CKSP context
     //
-    g_CkspWorkerContext = (PCKSP_WORKER_CONTEXT)ExAllocatePoolWithTag(NonPagedPool, sizeof(CKSP_WORKER_CONTEXT), 'cksp');
+    ExInitializeDriverRuntime(0);
+    g_CkspWorkerContext = (PCKSP_WORKER_CONTEXT)ExAllocatePoolZero(NonPagedPool, sizeof(CKSP_WORKER_CONTEXT), 'cksp');
     if (g_CkspWorkerContext == NULL) {
         Status = STATUS_NO_MEMORY;
         goto ON_DriverEntry_ERROR;
